@@ -1,7 +1,6 @@
 site_name: ${{ values.system }}-${{ values.service }} Documentation
 nav:
   - Home: index.md
-  - API: api.md
   - Deployment: deployment.md
 theme:
   name: 'material'
