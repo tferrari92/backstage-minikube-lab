@@ -30,6 +30,7 @@
   - [Templates I've Created](#templates-ive-created)
   - [My Arbitrary Rules](#my-arbitrary-rules)
 - [Run Backstage In Minikube](#run-backstage-in-minikube)
+- [Conclusion](#conclusion)
 
 
 </br>
@@ -275,10 +276,15 @@ Now go to localhost:8080 on your browser and Voilá!
 </br>
 </br>
 
+# CONCLUSION
+That's it! This is your own Backstage implementation now. 
+
+Feel free to add your own plugins, templates and whatever else you might think of. Customize to fit your own needs.
+
+For more DevOps and Platform Engineering goodness, check out my [Automate All The Things](https://github.com/tferrari92/automate-all-the-things) project.
 
 
-</br>
-</br>
+
 
 <!-- # CHALLENGE
 
