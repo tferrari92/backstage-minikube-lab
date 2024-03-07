@@ -1,6 +1,0 @@
-environment: stage
-
-deployment:
-  image:  
-    tag: 
-  replicas: 1

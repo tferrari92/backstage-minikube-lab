@@ -3,7 +3,7 @@ backstage:
 
   image:
     registry: ""
-    repository: tferrari92/backstage
+    repository: AATT_DOCKERHUB_USERNAME/backstage
     # tag: "0"
 
   extraEnvVars:
@@ -33,7 +33,7 @@ backstage:
         github:
           # Catalogs
           catalogsProvider:
-            organization: 'tomasferrarisenda' # This value was modified by the initial-setup script
+            organization: 'AATT_GITHUB_USERNAME' # This value was modified by the initial-setup script
             catalogPath: '/application-code/**/*catalog-info.yaml' # this will search all folders for files that end in template.yaml
             filters:
               branch: 'main' # string
@@ -44,7 +44,7 @@ backstage:
 
           # Resources
           resourcesProvider:
-            organization: 'tomasferrarisenda' # This value was modified by the initial-setup script
+            organization: 'AATT_GITHUB_USERNAME' # This value was modified by the initial-setup script
             catalogPath: '/application-code/**/*catalog-info.yaml' # this will search all folders for files that end in template.yaml
             filters:
               branch: 'main' # string
@@ -55,7 +55,7 @@ backstage:
 
           # APIs
           apisProvider:
-            organization: 'tomasferrarisenda' # This value was modified by the initial-setup script
+            organization: 'AATT_GITHUB_USERNAME' # This value was modified by the initial-setup script
             catalogPath: '/application-code/**/*api-info.yaml' # this will search all folders for files that end in template.yaml
             filters:
               branch: 'main' # string
@@ -66,7 +66,7 @@ backstage:
 
           # Templates
           templatesProvider:
-            organization: 'tomasferrarisenda' # This value was modified by the initial-setup script
+            organization: 'AATT_GITHUB_USERNAME' # This value was modified by the initial-setup script
             catalogPath: '/backstage/entities/templates/**/*template.yaml' # this will search all folders for files that end in template.yaml
             filters:
               branch: 'main' # string
@@ -77,7 +77,7 @@ backstage:
 
           # Systems
           systemsProvider:
-            organization: 'tomasferrarisenda' # This value was modified by the initial-setup script
+            organization: 'AATT_GITHUB_USERNAME' # This value was modified by the initial-setup script
             catalogPath: '/backstage/entities/systems/**/*.yaml' # this will search all folders for files that end in .yaml
             filters:
               branch: 'main' # string
@@ -88,7 +88,7 @@ backstage:
 
           # Groups
           groupsProvider:
-            organization: 'tomasferrarisenda' # This value was modified by the initial-setup script
+            organization: 'AATT_GITHUB_USERNAME' # This value was modified by the initial-setup script
             catalogPath: '/backstage/entities/groups/**/*.yaml' # this will search all folders for files that end in .yaml
             filters: # optional filters
               branch: 'main' # optional string
@@ -99,7 +99,7 @@ backstage:
 
           # Users
           usersProvider:
-            organization: 'tomasferrarisenda' # This value was modified by the initial-setup script
+            organization: 'AATT_GITHUB_USERNAME' # This value was modified by the initial-setup script
             catalogPath: '/backstage/entities/users/**/*.yaml' # this will search all folders for files that end in .yaml
             filters: # optional filters
               branch: 'main' # optional string
@@ -115,28 +115,3 @@ postgresql:
 
 serviceAccount:
   create: true
-
-
-# ingress:
-#   enabled: true
-#   host: backstage.tferrari.com # This value was modified by the initial-setup python script
-#   annotations: 
-#     # External-DNS related annotations
-#     external-dns.alpha.kubernetes.io/hostname: backstage.tferrari.com # This value was modified by the initial-setup python script
-
-#     # ALB related annotations
-#     kubernetes.io/ingress.class: alb
-#     alb.ingress.kubernetes.io/scheme: internet-facing
-#     alb.ingress.kubernetes.io/target-type: ip
-#     alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
-#     alb.ingress.kubernetes.io/healthcheck-port: traffic-port
-#     alb.ingress.kubernetes.io/healthcheck-interval-seconds: '15'
-#     alb.ingress.kubernetes.io/healthcheck-timeout-seconds: '5'
-#     alb.ingress.kubernetes.io/success-codes: '200'
-#     alb.ingress.kubernetes.io/healthy-threshold-count: '2'
-#     alb.ingress.kubernetes.io/unhealthy-threshold-count: '2'
-
-#     # TLS related annotations
-#     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
-#     alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:373421766055:certificate/d9b3107e-3882-4fff-b8b3-cf33f76daffb # This value was modified by the deploy-infra pipeline
-

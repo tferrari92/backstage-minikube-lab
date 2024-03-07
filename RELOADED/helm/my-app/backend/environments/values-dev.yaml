@@ -1,8 +1,0 @@
-environment: dev
-
-deployment:
-  image:  
-    tag: 1641
-  replicas: 1
-  env:
-    redis_host: redis-dev-master 

@@ -1,6 +1,0 @@
-environment: dev
-    
-deployment:
-  image:  
-    tag: 
-  replicas: 1

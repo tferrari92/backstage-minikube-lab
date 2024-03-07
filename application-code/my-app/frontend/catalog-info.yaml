@@ -10,7 +10,7 @@ metadata:
     - nginx
   links:
     - title: Documentation
-      url: https://github.com/tomasferrarisenda/backstage-minikube-lab
+      url: https://github.com/AATT_GITHUB_USERNAME/backstage-minikube-lab
     - url: https://admin.example-org.com
       title: Admin Dashboard
       icon: dashboard

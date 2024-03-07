@@ -17,7 +17,7 @@
     <a  href="/docs/readme_es.md">Versión en Español</a>
 </p> -->
 
-<p title="All The Things" align="center"> <img src="https://i.imgur.com/0zlneYu.png"> </p>
+<p title="Banner" align="center"> <img src="https://i.imgur.com/0zlneYu.png"> </p>
 
 # INDEX
 
@@ -30,9 +30,6 @@
 - [Initial Setup](#initial-setup)
 - [Run Backstage Locally](#run-backstage-locally)
 - [Run Backstage In Minikube](#run-backstage-in-minikube)
-<!-- - [Excercise](#excercise)
-  - [What we are starting off with](#what-we-are-starting-off-with)
-  - [What we are doing](#what-we-are-doing) -->
 
 
 </br>

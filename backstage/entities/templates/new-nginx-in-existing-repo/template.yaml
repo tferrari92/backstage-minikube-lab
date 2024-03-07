@@ -40,16 +40,6 @@ spec:
           ui:options:
             allowedKinds:
               - Group
-        # tags:
-        #   type: array
-        #   title: Tags
-        #   description: Tags to categorize the service
-        #   items:
-        #     type: string
-        # targetPath:
-        #   title: Target Path in repo
-        #   type: string
-        #   description: Name of the directory to create in the repository. Don't include the root slash.
 
     - title: Choose a location
       required:
@@ -75,21 +65,6 @@ spec:
           service: ${{ parameters.service }}
           description: ${{ parameters.description }}
           owner: ${{ parameters.owner }}
-          # tags: ['nodejs', 'example-tag2', 'example-tag3']
-          # tags:
-          #   - hard-coded-tag1
-          #   - hard-coded-tag2
-
-# RELOADED
-    # - id: fetch-helm-chart
-    #   name: Fetch Helm Chart
-    #   action: fetch:template
-    #   input:
-    #     url: ./helm-chart
-    #     targetPath: helm/${{ parameters.system }}/${{ parameters.service }}
-    #     values:
-    #       system: ${{ parameters.system }}
-    #       service: ${{ parameters.service }}
 
     - id: fetch-k8s-manifests
       name: Fetch K8S Manifests
@@ -127,27 +102,11 @@ spec:
         paths: 
           - application-code/${{ parameters.system }}/${{ parameters.service }}
           - k8s-manifests/${{ parameters.system }}-${{ parameters.service }}
-# RELOADED
-          # - helm/${{ parameters.system }}/${{parameters.service}}
           - .github/workflows
 
-    # NO HACE FALTA REGISTRAR EN CATALOGO PORQ VA A SER AUTO DESCUBIERTO POR EL GH DISCOVERY PLUGIN
-    # The final step is to register our new component in the catalog.
-    # - id: register
-    #   name: Register
-    #   action: catalog:register
-    #   input:
-    #     repoContentsUrl: https://github.com/tomasferrarisenda/backstage
-    #     catalogInfoPath: backstage/blob/create-${{ parameters.system }}-${{ parameters.service }}/${{ parameters.system }}/${{ parameters.service }}/catalog-info.yaml
-        
   output:
     links:
-      # - title: Repository
-      #   url: ${{ steps.publish.output.remoteUrl }}
       - url: ${{ steps.publish.output.remoteUrl }}
         title: "Go to PR"
-      # - title: Open in catalog
-      #   icon: catalog
-      #   entityRef: ${{ steps.register.output.entityRef }}
 
 
