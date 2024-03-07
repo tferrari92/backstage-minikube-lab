@@ -145,8 +145,6 @@ This should open Backstage in your browser on localhost:3000.
 
 Every time you make changes to the Backstage code, it's recommended you test it by running it locally with "yarn dev", since it will be much faster that testing it in Minikube.
 
-"Ctrl + C" to stop the running process and let's deploy it in Minikube...
-
 </br>
 </br>
 
