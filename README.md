@@ -154,6 +154,8 @@ Every time you make changes to the Backstage code, it's recommended you test it 
 </br>
 
 # CUSTOMISING BACKSTAGE
+Before deploying to Minikube, lets go over some things you'll find in this Backstage deployment.
+
 Backstage is designed to be flexible and allow every organization to adapt it to their own needs. It is not a black-box application where you install plugins; rather, you maintain your own source code and can modify it as needed.
 
 I've already added some custom stuff to the default Backstage installation that I think are essential. 
