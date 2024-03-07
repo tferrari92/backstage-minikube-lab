@@ -23,12 +23,12 @@
 
 - [Introduction](#introduction)
 - [Prerequisites](#prerequisites)
+- [Initial Setup](#initial-setup)
+- [Run Backstage Locally](#run-backstage-locally)
 - [Customising Backstage](#customising-backstage)
   - [Plugins I've Added](#plugins-ive-added)
   - [Templates I've Created](#templates-ive-created)
   - [My Arbitrary Rules](#my-arbitrary-rules)
-- [Initial Setup](#initial-setup)
-- [Run Backstage Locally](#run-backstage-locally)
 - [Run Backstage In Minikube](#run-backstage-in-minikube)
 
 
@@ -36,12 +36,9 @@
 </br>
 
 # INTRODUCTION
-This is a spinoff of my [Automate All The Things](https://github.com/tferrari92/automate-all-the-things) project. While working on the [Nirvana Edition](https://github.com/tferrari92/automate-all-the-things-nirvana) - which will include a Developer Portal built with Backstage - I'm creating this smaller lab for anyone who wants to start experimenting with this tool.
+This is a spinoff of my [Automate All The Things](https://github.com/tferrari92/automate-all-the-things) DevOps project. While working on the [Nirvana Edition](https://github.com/tferrari92/automate-all-the-things-nirvana) - which will include a Developer Portal built with Backstage - I'm creating this smaller lab for anyone who wants to start experimenting with this tool.
 
 Backstage is a framework for creating developer portals. This developer portal should act as a centralized hub for your organization, providing access to documentation, infrastructure, tooling, and code standards. It gives developers everything they need to create and manage their projects in a consistent and standardized manner. If you are new to Backstage, I invite you to read [this brilliant series of articles](https://www.kosli.com/blog/evaluating-backstage-1-why-backstage/) by Alexandre Couedelo.
-
-<!-- RELOADED -->
-<!-- We'll be using a GitOps methodology with Helm, ArgoCD and the App Of Apps Pattern. There is some extra information [here](/docs/argocd-notes.md), but you are expected to know about these things. -->
 
 </br>
 </br>
@@ -51,125 +48,6 @@ Backstage is a framework for creating developer portals. This developer portal s
 - minikube installed
 - kubectl installed
 - helm installed
-
-</br>
-</br>
-
-# CUSTOMISING BACKSTAGE
-Backstage is designed to be flexible and allow every organization to adapt it to their own needs. It is not a black-box application where you install plugins; rather, you maintain your own source code and can modify it as needed.
-
-I've already added some custom stuff to the default Backstage installation that I think are essential. 
-
-</br>
-
-## Plugins I've added
-
-### Kubernetes plugin
-The [Kubernetes plugin](https://backstage.io/docs/features/kubernetes/) in Backstage is a tool that's designed around the needs of service owners, not cluster admins. Now developers can easily check the health of their services no matter how or where those services are deployed — whether it's on a local host for testing or in production on dozens of clusters around the world.
-
-It will elevate the visibility of errors where identified, and provide drill down about the deployments, pods, and other objects for a service.
-
-</br>
-
-### GitHub Discovery plugin 
-The [GitHub Discovery plugin](https://backstage.io/docs/integrations/github/discovery) automatically discovers catalog entities within a GitHub organization. The provider will crawl the GitHub organization and register entities matching the configured path. This can be useful as an alternative to static locations or manually adding things to the catalog. This is the preferred method for ingesting entities into the catalog.
-
-I've installed it without events support. Updates to the catalog will rely on periodic scanning rather than real-time updates.
-
-You can check the automatic discovery configuration under catalog.providers.github in the [app-config.yaml](/backstage/my-backstage/app-config.yaml) and [app-config.production.yaml](/backstage/my-backstage/app-config.production.yaml) files.
-
-**IMPORTANT**: We use [app-config.yaml](/backstage/my-backstage/app-config.yaml) for local testing (when running `yarn dev`) and [app-config.production.yaml](/backstage/my-backstage/app-config.production.yaml) when deploying to Minikube.
-
-</br>
-
-<!-- ### GitHub Actions plugin 
-https://roadie.io/backstage/plugins/github-actions/ -->
-
-<!-- ## ArgoCD plugin
-https://roadie.io/backstage/plugins/argo-cd/
-
-## GitHub Insights plugin
-https://roadie.io/backstage/plugins/github-insights/
-
-## Grafana plugin
-https://roadie.io/docs/integrations/grafana/ -->
-
-<!-- ## GitHub Security Insights plugin ## ESTE NO SE SI REQUIERE TAMBEN EL DE LOGIN CON GITHUB. HAY   PROBARLO 
-https://www.kosli.com/blog/implementing-backstage-4-security-and-compliance/
-https://roadie.io/backstage/plugins/security-insights/ -->
-
-<!-- ## Homepage plugin
-https://backstage.io/docs/getting-started/homepage/ 
-https://www.kosli.com/blog/succeeding-with-backstage-part-1-customizing-the-look-and-feel-of-backstage/-->
-
-
-<!-- ## Changed App Theme
-https://www.kosli.com/blog/succeeding-with-backstage-part-1-customizing-the-look-and-feel-of-backstage/ -->
-
-</br>
-
-## Templates I've created
-
-### New Backstage System
-Creates a new Backstage System with the provided information. A System in Backstage is a collection of entities (services, resources, APIs, etc.) that cooperate to perform a some function. For example, we will have a System called "my-app" that includes the my-app-frontend service, the my-app-backend service, the my-app-redis database and the my-app-backend API.
-
-It generates a Pull Request which includes a new System manifest. When merged, the System catalog entity will be automatically added to the Backstage catalog by the GitHub Discovery plugin.
-
-</br>
-
-### New Backstage Group
-Creates a new Backstage group with the provided information. 
-
-It generates a Pull Request which includes a new Group manifest. When merged, the Group catalog entity will be automatically added to the Backstage catalog by the GitHub Discovery plugin.
-
-</br>
-
-### New Backstage User
-Creates a new Backstage user with the provided information. 
-
-It generates a Pull Request which includes a new User manifest. When merged, the User catalog entity will be automatically added to the Backstage catalog by the GitHub Discovery plugin.
-
-</br>
-
-### New Node.js in existing repo
-Creates all the boilerplate files and directories in an existing repo for deploying a new Node.js service in Kubernetes:
-1. The application code directory and files, which will saved in [the application-code directory](/application-code/).
-2. The kubernetes manifests directory and files, which will be saved in [the k8s-manifests directory](/k8s-manifests/).
-3. The build and push GitHub workflow manifest, which will be saved [the .github/workflows directory](/.github/workflows/).
-<!-- RELAODED -->
-<!-- 3. The [backend service argocd application manifests](/argo-cd/applications/my-app/backend/): These are read by the App of Apps to  -->
-It generates a Pull Request which includes all these files al directories.
-
-</br>
-
-### New NGINX in existing repo
-Creates all the boilerplate files and directories in an existing repo for deploying a new NGINX service in Kubernetes:
-1. The application code directory and files, which will saved in [the application-code directory](/application-code/).
-2. The kubernetes manifests directory and files, which will be saved in [the k8s-manifests directory](/k8s-manifests/).
-3. The build and push GitHub workflow manifest, which will be saved [the .github/workflows directory](/.github/workflows/).
-<!-- RELAODED -->
-<!-- 3. The [backend service argocd application manifests](/argo-cd/applications/my-app/backend/): These are read by the App of Apps to  -->
-
-It generates a Pull Request which includes all these files al directories.
-
-</br>
-
-## My Arbitrary Rules
-
-### App-config management 
-The app-config is the file that defines the Backstage configuration. You will find three instances of app-config:
-1. [The app-config.yaml file](/backstage/my-backstage/app-config.yaml): This is the config that will be used for development and testing purposes when running locally with `yarn dev` command.
-2. [The app-config.production.yaml file](/backstage/my-backstage/app-config.yaml): This is the config that will be used for building the Docker image that will be deployed in Minikube. You will notice that it's missing the catalog configuration. That's because the catalog configuration will be passed in through a ConfigMap.
-3. [The helm chart values-custom.yaml file](/backstage/helm-chart/values-custom.yaml): Since the catalog configuration is something that might need to be modified more often, I decided it should be specified in a ConfigMap and not hard coded into the Docker image. You can find the catalog configuration in the values-custom.yaml file of the Backstage helm chart. Helm will create a ConfigMap with these values and pass it in to the Backstage pod at the time of creation.
-
-</br>
-
-### Users and groups hierarchy
-I decided that user and group hierarchy should be defined from the bottom up. To me, it makes more sense that childs should keep track of their parents than parents of their childs.
-
-So we will not define the members of a group in the Group manifest, but we will define the group a user belongs to in the spec.memberOf of the User manifest. 
-
-Also, we will always have the spec.children value of Group manifests as an empty array and the spec.parent value filled with whoever the parent group of that group is. If it has no parent, the value of spec.parent should be "root".
 
 </br>
 </br>
@@ -274,6 +152,97 @@ Every time you make changes to the Backstage code, it's recommended you test it 
 
 </br>
 </br>
+
+# CUSTOMISING BACKSTAGE
+Backstage is designed to be flexible and allow every organization to adapt it to their own needs. It is not a black-box application where you install plugins; rather, you maintain your own source code and can modify it as needed.
+
+I've already added some custom stuff to the default Backstage installation that I think are essential. 
+
+</br>
+
+## Plugins I've added
+
+### Kubernetes plugin
+The [Kubernetes plugin](https://backstage.io/docs/features/kubernetes/) in Backstage is a tool that's designed around the needs of service owners, not cluster admins. Now developers can easily check the health of their services no matter how or where those services are deployed — whether it's on a local host for testing or in production on dozens of clusters around the world.
+
+It will elevate the visibility of errors where identified, and provide drill down about the deployments, pods, and other objects for a service.
+
+</br>
+
+### GitHub Discovery plugin 
+The [GitHub Discovery plugin](https://backstage.io/docs/integrations/github/discovery) automatically discovers catalog entities within a GitHub organization. The provider will crawl the GitHub organization and register entities matching the configured path. This can be useful as an alternative to static locations or manually adding things to the catalog. This is the preferred method for ingesting entities into the catalog.
+
+I've installed it without events support. Updates to the catalog will rely on periodic scanning rather than real-time updates.
+
+You can check the automatic discovery configuration under catalog.providers.github in the [app-config.yaml](/backstage/my-backstage/app-config.yaml) and [app-config.production.yaml](/backstage/my-backstage/app-config.production.yaml) files.
+
+**IMPORTANT**: We use [app-config.yaml](/backstage/my-backstage/app-config.yaml) for local testing (when running `yarn dev`) and [app-config.production.yaml](/backstage/my-backstage/app-config.production.yaml) when deploying to Minikube.
+
+</br>
+
+## Templates I've created
+
+### New Backstage System
+Creates a new Backstage System with the provided information. A System in Backstage is a collection of entities (services, resources, APIs, etc.) that cooperate to perform a some function. For example, we will have a System called "my-app" that includes the my-app-frontend service, the my-app-backend service, the my-app-redis database and the my-app-backend API.
+
+It generates a Pull Request which includes a new System manifest. When merged, the System catalog entity will be automatically added to the Backstage catalog by the GitHub Discovery plugin.
+
+</br>
+
+### New Backstage Group
+Creates a new Backstage group with the provided information. 
+
+It generates a Pull Request which includes a new Group manifest. When merged, the Group catalog entity will be automatically added to the Backstage catalog by the GitHub Discovery plugin.
+
+</br>
+
+### New Backstage User
+Creates a new Backstage user with the provided information. 
+
+It generates a Pull Request which includes a new User manifest. When merged, the User catalog entity will be automatically added to the Backstage catalog by the GitHub Discovery plugin.
+
+</br>
+
+### New Node.js in existing repo
+Creates all the boilerplate files and directories in an existing repo for deploying a new Node.js service in Kubernetes:
+1. The application code directory and files, which will saved in [the application-code directory](/application-code/).
+2. The kubernetes manifests directory and files, which will be saved in [the k8s-manifests directory](/k8s-manifests/).
+3. The build and push GitHub workflow manifest, which will be saved [the .github/workflows directory](/.github/workflows/).
+
+It generates a Pull Request which includes all these files al directories.
+
+</br>
+
+### New NGINX in existing repo
+Creates all the boilerplate files and directories in an existing repo for deploying a new NGINX service in Kubernetes:
+1. The application code directory and files, which will saved in [the application-code directory](/application-code/).
+2. The kubernetes manifests directory and files, which will be saved in [the k8s-manifests directory](/k8s-manifests/).
+3. The build and push GitHub workflow manifest, which will be saved [the .github/workflows directory](/.github/workflows/).
+
+It generates a Pull Request which includes all these files al directories.
+
+</br>
+
+## My Arbitrary Rules
+
+### App-config management 
+The app-config is the file that defines the Backstage configuration. You will find three instances of app-config:
+1. [The app-config.yaml file](/backstage/my-backstage/app-config.yaml): This is the config that will be used for development and testing purposes when running locally with `yarn dev` command.
+2. [The app-config.production.yaml file](/backstage/my-backstage/app-config.yaml): This is the config that will be used for building the Docker image that will be deployed in Minikube. You will notice that it's missing the catalog configuration. That's because the catalog configuration will be passed in through a ConfigMap.
+3. [The helm chart values-custom.yaml file](/backstage/helm-chart/values-custom.yaml): Since the catalog configuration is something that might need to be modified more often, I decided it should be specified in a ConfigMap and not hard coded into the Docker image. You can find the catalog configuration in the values-custom.yaml file of the Backstage helm chart. Helm will create a ConfigMap with these values and pass it in to the Backstage pod at the time of creation.
+
+</br>
+
+### Users and groups hierarchy
+I decided that user and group hierarchy should be defined from the bottom up. To me, it makes more sense that childs should keep track of their parents than parents of their childs.
+
+So we will not define the members of a group in the Group manifest, but we will define the group a user belongs to in the spec.memberOf of the User manifest. 
+
+Also, we will always have the spec.children value of Group manifests as an empty array and the spec.parent value filled with whoever the parent group of that group is. If it has no parent, the value of spec.parent should be "root".
+
+</br>
+</br>
+
 
 # RUN BACKSTAGE IN MINIKUBE
 
