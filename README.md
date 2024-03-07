@@ -249,7 +249,7 @@ Also, we will always have the spec.children value of Group manifests as an empty
 # RUN BACKSTAGE IN MINIKUBE
 Ok, lets run Backstage in Minikube. `Ctrl + C` to kill the `yarn dev` process.
 
-We first need o build and push the Backstage Docker image. Run the build-push-image.sh script:
+We first need to build and push the Backstage Docker image. Run the build-push-image.sh script:
 ```bash
 chmod +x build-push-image.sh
 ./build-push-image.sh
@@ -257,17 +257,16 @@ chmod +x build-push-image.sh
 
 If you have a Minikube cluster running, delete it first with `minikube delete`.
 
+cd to the root of the repo:
+```bash
+cd ../..
+```
+
 Now run the deploy-in-minikube.sh script to get everything setup:
 ```bash
 chmod +x deploy-in-minikube.sh
 ./deploy-in-minikube.sh
 ```
-
-<!-- Run the start.sh script to get everything setup
-```bash
-chmod +x backstage/deploy-k8s-environment.sh
-backstage/deploy-k8s-environment.sh
-``` -->
 
 </br>
 
@@ -285,7 +284,7 @@ Now go to localhost:8080 on your browser and Voilá!
 
 Create a new system with a  -->
 
-
+<!-- 
 # CUSTOMIZE YOUR OWN BACKSTAGE
 Now you are free to make all the customizations you want . These are some things you can try:
 
@@ -295,7 +294,7 @@ create template directory save it in backstage/entities/templates/
 ## Add New Plugins
 bla bla
 Test with yarn dev
-Build and push image
+Build and push image -->
 
 
 
