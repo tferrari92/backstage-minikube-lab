@@ -1,0 +1,4 @@
+apiVersion: v2
+name: ${{ values.name }} 
+description: A Helm chart for deploying ${{ values.name }}
+version: 1.0

@@ -1,0 +1,17 @@
+appName: ${{ values.system }}  
+
+service: ${{ values.service }} 
+
+deployment:
+  image:
+    repository: tferrari92/${{ values.system }}-${{ values.service }} 
+    tag: 0
+  replicas: 1
+
+  labels:
+    system: ${{ values.system }}
+    service: ${{ values.service }}
+    app: ${{ values.system }}-${{ values.service }}
+    backstage.io/kubernetes-id: ${{ values.system }}-${{ values.service }}
+
+  env:

@@ -1,0 +1,9 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: backstage-chart
+  annotations:
+    github.com/project-slug: tomasferrarisenda/backstage-chart
+spec:
+  type: other
+  lifecycle: unknown

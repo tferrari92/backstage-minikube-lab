@@ -1,0 +1,16 @@
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: ${{ values.name | lower }}
+  title: ${{ values.title }}
+  description: ${{ values.description }}
+  tags:
+    - engineering
+    - nodejs
+spec:
+  type: ${{ values.type }}
+  children: []
+  parent: ${{ values.parent }}
+  profile:
+    email: ${{ values.email }}
+    # slack: 

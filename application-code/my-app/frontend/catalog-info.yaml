@@ -1,0 +1,33 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: my-app-frontend
+  description: My-App Frontend service
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+    backstage.io/kubernetes-id: my-app-frontend
+  tags:
+    - nginx
+  links:
+    - title: Documentation
+      url: https://github.com/tomasferrarisenda/backstage-minikube-lab
+    - url: https://admin.example-org.com
+      title: Admin Dashboard
+      icon: dashboard
+      type: admin-dashboard
+    - url: https://grafana.domain.com/
+      title: metrics
+      icon: analytics
+      type: metrics-dashboard
+    - url: https://grafana.domain.com/
+      title: logs
+      icon: assignment
+      type: logs-dashboard  
+spec:
+  type: service
+  lifecycle: production
+  owner: group:default/my-app-frontend-subteam
+  system: my-app
+  dependsOn:
+    - component:default/my-app-backend
+

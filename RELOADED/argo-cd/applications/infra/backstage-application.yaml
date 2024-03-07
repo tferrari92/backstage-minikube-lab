@@ -1,0 +1,25 @@
+# Helm chart
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: backstage
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io # Adding the finalizer enables cascading deletes when implementing the App of Apps pattern. If this isn't used, when you remove the application yaml from git, the application will be removed from ArgoCD but the resources will remain active in the cluster
+spec:
+  destination:
+    namespace: backstage
+    server: https://kubernetes.default.svc  
+  project: default
+  source:
+    path: helm/infra/backstage
+    helm:
+      valueFiles:
+        - values-custom.yaml
+    repoURL: https://github.com/tomasferrarisenda/backstage-minikube-lab.git # This value was modified by the initial-setup python script
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

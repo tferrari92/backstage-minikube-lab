@@ -1,0 +1,123 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: new-backstage-group
+  title: New Backstage Group
+  description: Create new Backstage group
+  tags:
+    - backstage
+spec:
+  owner: web@example.com
+  type: component
+  parameters:
+    - title: Provide some simple information
+      required:
+        - name
+        - title
+        - description
+        - type
+        - email
+      properties:
+        name:
+          title: Name
+          type: string
+          description: Name of the new user
+          ui:field: EntityNamePicker
+          ui:autofocus: true
+        title:
+          title: Title
+          type: string
+          description: Human readable title of the new group
+          # ui:field: EntityNamePicker
+          ui:autofocus: true
+        description:
+          title: Description
+          type: string
+          description: Describe the new group
+          # ui:field: EntityNamePicker
+          ui:autofocus: true
+        parent:
+          title: Parent
+          type: string
+          description: Parent of the new group. If empty, it will default to 'root'
+        type:
+          title: Type
+          type: string
+          description: Type of the new group
+          enum:
+            - team
+            - business-unit
+            - product-area
+        email:
+          title: Email
+          type: string
+          description: Email of the new group
+          # ui:field: EntityNamePicker
+          ui:autofocus: true
+
+
+    - title: Choose a location
+      required:
+        - repoUrl
+      properties:
+        repoUrl:
+          title: Repository Location
+          type: string
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
+              - github.com
+
+  steps:
+    - id: fetch-base
+      name: Fetch Base
+      action: fetch:template
+      input:
+        url: ./skeleton
+        values:
+          name: ${{ parameters.name }}
+          title: ${{ parameters.title }}
+          description: ${{ parameters.description }}
+          type: ${{ parameters.type }}
+          # Had to add default value 'root' because the 'parent' parameter in the Group manifest needs to have a value. It cannot be '[]' or 'null'. 
+          # And since we are establishing hierarchy from the bottom up, we must have the 'parent' parameter in the Group manifest.
+          parent: ${{ parameters.parent | default('root') }}
+          email: ${{ parameters.email }}
+
+    # - id: append-new-user
+    #   name: Append new user to all-users.yaml
+    #   action: shell
+    #   input:
+    #     cmd: bash
+    #     args:
+    #       - -c
+    #       - |
+    #         echo "    - ./users/${{parameters.name | lower }}-${{parameters.lastName | lower }}.yaml" >> entities/all-users.yaml
+
+    - id: publish
+      name: Publish
+      action: publish:github:pull-request
+      input:
+        allowedHosts: ['github.com']
+        repoUrl: ${{ parameters.repoUrl }}
+        title: "Create new group: ${{parameters.name}}"
+        branchName: create-group-${{parameters.name | lower }}
+        description: |
+          # New user: ${{parameters.name}}
+        targetPath: backstage/entities/groups
+        # targetPath: "" # Leave empty to use the root of the repo or specify if needed
+        # paths: 
+        #   - backstage/entities/users
+        #   - backstage/entities/all-users.yaml
+        
+  output:
+    links:
+      - url: ${{steps.publish.output.remoteUrl}}
+        title: "Go to PR"
+      # - title: Repository
+      #   url: ${{ steps.publish.output.remoteUrl }}
+      # - title: Open in catalog
+      #   icon: catalog
+      #   entityRef: ${{ steps.register.output.entityRef }}
+
+

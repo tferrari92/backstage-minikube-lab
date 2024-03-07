@@ -1,0 +1,18 @@
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: my-app-backend-subteam
+  title: My-App Backend Subteam
+  description: Responsible for maintaining and developing the backend of My-App
+  tags:
+    - engineering
+    - nodejs
+spec:
+  type: team
+  children: []
+  parent: my-app-team
+  # members:
+  #   - kratos
+  profile:
+    email: my-app-backend-subteam@example.com
+    # slack: 

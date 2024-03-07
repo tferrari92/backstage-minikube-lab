@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ${{ values.system }}-${{ values.service }}-deployment
+  namespace: ${{ values.system }}
+  labels:
+    app: "${{ values.system }}-${{ values.service }}"
+    backstage.io/kubernetes-id: "${{ values.system }}-${{ values.service }}"
+    service: "${{ values.service }}"
+    system: "${{ values.system }}"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "${{ values.system }}-${{ values.service }}"
+      service: "${{ values.service }}"
+      system: "${{ values.system }}"
+  template:
+    metadata:
+      labels:
+        app: "${{ values.system }}-${{ values.service }}"
+        backstage.io/kubernetes-id: "${{ values.system }}-${{ values.service }}"
+        service: "${{ values.service }}"
+        system: "${{ values.system }}"
+    spec:
+      containers:
+        - name: ${{ values.system }}-${{ values.service }}
+          image: tferrari92/${{ values.system }}-${{ values.service }}:0
+          ports:
+            - containerPort: 3000
+          env:

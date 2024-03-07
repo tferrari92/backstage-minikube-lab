@@ -1,0 +1,12 @@
+appName: gonchi 
+
+service: ${{ values.name }} 
+
+containerPort: 3000 # Port where the app in the container exposes the service
+
+deployment:
+  labels: {    
+    istio: monitor # This label is used by the PodMonitor
+  }
+  image:
+    repository: harbor.tferrari.com/gonchi/backend 

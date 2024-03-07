@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app-frontend-deployment
+  namespace: my-app
+  labels:
+    app: "my-app-frontend"
+    backstage.io/kubernetes-id: "my-app-frontend"
+    service: "frontend"
+    system: "my-app"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "my-app-frontend"
+      service: "frontend"
+      system: "my-app"
+  template:
+    metadata:
+      labels:
+        app: "my-app-frontend"
+        backstage.io/kubernetes-id: "my-app-frontend"
+        service: "frontend"
+        system: "my-app"
+    spec:
+      containers:
+        - name: my-app-frontend
+          image: tferrari92/my-app-frontend:13
+          ports:
+            - containerPort: 80

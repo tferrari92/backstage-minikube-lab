@@ -1,0 +1,18 @@
+appName: my-app
+
+service: backend
+
+deployment:
+  image:
+    repository: tferrari92/my-app-backend # This value was modified by the initial-setup script
+    tag: 1641
+  replicas: 1
+
+  labels:
+    system: my-app
+    service: backend
+    app: my-app-backend
+    backstage.io/kubernetes-id: my-app-backend
+    
+  env:
+    redis_host: redis-master 

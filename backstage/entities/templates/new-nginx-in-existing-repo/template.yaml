@@ -1,0 +1,153 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: new-nginx-in-existing-repo
+  title: New NGINX in Existing Repo
+  description: Creates all the boilerplate files and directories in an existing repo for deploying a new NGINX service in Kubernetes. Useful for creating a frontend static website.
+  tags:
+    - nginx
+spec:
+  owner: web@example.com
+  type: service
+  parameters:
+    - title: Provide some simple information
+      required:
+        - system
+        - service
+        - description
+        - owner
+      properties:
+        system:
+          title: System
+          type: string
+          description: Name of the system the new service belongs to. Example -> 'my-app'
+          ui:field: EntityNamePicker
+          ui:autofocus: true
+        service:
+          title: Name
+          type: string
+          description: Unique name of the new service. Example -> 'backend'
+          ui:field: EntityNamePicker
+        description:
+          title: Description
+          type: string
+          description: Help others understand what this service is for
+        owner:
+          title: Owner
+          type: string
+          description: Owner of the service
+          ui:field: OwnerPicker
+          ui:options:
+            allowedKinds:
+              - Group
+        # tags:
+        #   type: array
+        #   title: Tags
+        #   description: Tags to categorize the service
+        #   items:
+        #     type: string
+        # targetPath:
+        #   title: Target Path in repo
+        #   type: string
+        #   description: Name of the directory to create in the repository. Don't include the root slash.
+
+    - title: Choose a location
+      required:
+        - repoUrl
+      properties:
+        repoUrl:
+          title: Repository Location
+          type: string
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
+              - github.com
+
+  steps:
+    - id: fetch-base-code
+      name: Fetch Base Code
+      action: fetch:template
+      input:
+        url: ./base-code
+        targetPath: application-code/${{ parameters.system }}/${{ parameters.service }}
+        values:
+          system: ${{ parameters.system }}
+          service: ${{ parameters.service }}
+          description: ${{ parameters.description }}
+          owner: ${{ parameters.owner }}
+          # tags: ['nodejs', 'example-tag2', 'example-tag3']
+          # tags:
+          #   - hard-coded-tag1
+          #   - hard-coded-tag2
+
+# RELOADED
+    # - id: fetch-helm-chart
+    #   name: Fetch Helm Chart
+    #   action: fetch:template
+    #   input:
+    #     url: ./helm-chart
+    #     targetPath: helm/${{ parameters.system }}/${{ parameters.service }}
+    #     values:
+    #       system: ${{ parameters.system }}
+    #       service: ${{ parameters.service }}
+
+    - id: fetch-k8s-manifests
+      name: Fetch K8S Manifests
+      action: fetch:template
+      input:
+        url: ./k8s-manifests
+        targetPath: k8s-manifests/${{ parameters.system }}/${{ parameters.service }}
+        values:
+          system: ${{ parameters.system }}
+          service: ${{ parameters.service }}
+
+    - id: fetch-github-workflow
+      name: Fetch GitHub Workflow
+      action: fetch:template
+      input:
+        url: ./github-workflow
+        targetPath: .github/workflows
+        values:
+          system: ${{ parameters.system }}
+          service: ${{ parameters.service }}
+
+    - id: publish
+      name: Publish
+      action: publish:github:pull-request
+      input:
+        allowedHosts: ['github.com']
+        repoUrl: ${{ parameters.repoUrl }}
+        title: "Create new project: ${{ parameters.system }}-${{ parameters.service }}"
+        branchName: create-${{ parameters.system }}-${{ parameters.service }}
+        description: |
+          # New project: ${{ parameters.system }}-${{ parameters.service }}
+
+          ${{ parameters.description if parameters.description }}
+        targetPath: "" # Leave empty to use the root of the repo or specify if needed
+        paths: 
+          - application-code/${{ parameters.system }}/${{ parameters.service }}
+          - k8s-manifests/${{ parameters.system }}-${{ parameters.service }}
+# RELOADED
+          # - helm/${{ parameters.system }}/${{parameters.service}}
+          - .github/workflows
+
+    # NO HACE FALTA REGISTRAR EN CATALOGO PORQ VA A SER AUTO DESCUBIERTO POR EL GH DISCOVERY PLUGIN
+    # The final step is to register our new component in the catalog.
+    # - id: register
+    #   name: Register
+    #   action: catalog:register
+    #   input:
+    #     repoContentsUrl: https://github.com/tomasferrarisenda/backstage
+    #     catalogInfoPath: backstage/blob/create-${{ parameters.system }}-${{ parameters.service }}/${{ parameters.system }}/${{ parameters.service }}/catalog-info.yaml
+        
+  output:
+    links:
+      # - title: Repository
+      #   url: ${{ steps.publish.output.remoteUrl }}
+      - url: ${{ steps.publish.output.remoteUrl }}
+        title: "Go to PR"
+      # - title: Open in catalog
+      #   icon: catalog
+      #   entityRef: ${{ steps.register.output.entityRef }}
+
+

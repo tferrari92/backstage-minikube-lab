@@ -1,0 +1,31 @@
+name: Build & push ${{ values.system }}-${{ values.service }} image
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '${{ values.system }}/${{ values.service }}/**'
+
+env:
+  SYSTEM: ${{ values.system }}
+  SERVICE: ${{ values.service }}
+
+jobs:
+  build-and-push:
+    name: Build & push docker image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Build and push Docker image
+        uses: mr-smithers-excellent/docker-build-push@v4
+        with:
+          image: {% raw %}${{ secrets.DOCKER_USERNAME }}/${{ env.SYSTEM }}-${{ env.SERVICE }}{% endraw %}
+          tag: {% raw %}${{ github.run_number }}{% endraw %}
+          registry: docker.io
+          directory: {% raw %}${{ env.SYSTEM }}/${{ env.SERVICE }}{% endraw %}
+          dockerfile: {% raw %}${{ env.SYSTEM }}/${{ env.SERVICE }}{% endraw %}/Dockerfile
+          username: {% raw %}${{ secrets.DOCKER_USERNAME }}{% endraw %}
+          password: {% raw %}${{ secrets.DOCKER_PASSWORD }}{% endraw %}

@@ -1,0 +1,108 @@
+name: build-and-deploy-backstage
+
+# trigger:
+#   branches:
+#     include:
+#       - main  
+#   paths:
+#     include:
+#       - my-app/backend/*
+
+variables:
+  - name: DOCKERHUB_USERNAME
+    value: tferrari92 # This value was modified by the initial-setup python script
+#   - name: APP_NAME
+#     value: gonchi # This value was modified by the initial-setup python script
+#   - name: USER_EMAIL
+#     value: tomas.ferrari@sendati.com # This value was modified by the initial-setup python script
+#   - name: DOMAIN
+#     value: tferrari.com # This value was modified by the initial-setup python script
+
+    
+pool:
+  vmImage: 'ubuntu-latest' 
+  # If you are using a self-hosted agent, comment out the previous line and uncomment the following three
+  # name: <agent-pool-name> # Insert here the name of the agent pool you created
+  # demands:
+  #   - agent.name -equals <agent-name> # Insert here the name of the agent you created
+
+stages:
+- stage: BuildApp
+  jobs:
+  - job: BuildJob
+    displayName: 'Build Job'
+    steps:
+    - task: YarnInstaller@3
+      inputs:
+        versionSpec: '1.22.19'
+
+    - task: Yarn@3
+      inputs:
+        projectDirectory: 'backstage-updated/backstage-aatt'
+        arguments: 'global add concurrently'
+      displayName: Yarn global add concurrently
+
+    - task: Yarn@3
+      inputs:
+        projectDirectory: 'backstage-updated/backstage-aatt'
+        arguments: 'install --frozen-lockfile'
+        # arguments: 'install --frozen-lockfile'
+      displayName: Yarn install
+      
+
+    # - task: Yarn@3
+    #   inputs:
+    #     projectDirectory: 'backstage-updated/backstage-aatt'
+    #     arguments: 'tsc'
+
+    - task: Yarn@3
+      inputs:
+        projectDirectory: 'backstage-updated/backstage-aatt'
+        arguments: 'build:backend'
+      displayName: Yarn build:backend
+      
+
+    - task: DockerInstaller@0
+      displayName: Install Docker
+      inputs:
+        dockerVersion: '17.09.0-ce'
+
+    - task: Docker@2
+      displayName: Build And Push Image
+      inputs:
+        containerRegistry: 'dockerhub'
+        repository: '$(DOCKERHUB_USERNAME)/backstage'
+        command: 'buildAndPush'
+        buildContext: 'backstage-updated/backstage-aatt'
+        Dockerfile: 'backstage-updated/backstage-aatt/packages/backend/Dockerfile'
+
+
+
+- stage: Deploy
+  condition: succeeded()
+  jobs:
+  - job: DeployJob
+    steps:
+
+    # In this case it's necessary to specify the checkout with the persistCredential options set to true. This will enable us to push the changes to the repo.
+    - checkout: self
+      persistCredentials: true
+
+    # We update the local repo with a pull just in case there have been any recent modifications
+    - script: |
+        git pull origin main
+      displayName: Update repo
+
+    - script: |
+        sed 's|image: $(DOCKERHUB_USERNAME)/backstage:.*|image: $(DOCKERHUB_USERNAME)/backstage:$(Build.BuildId)|g' manifests/backstage-resources/bs-deploy.yaml
+      displayName: Update Tag In values-dev.yaml
+
+    - script: |
+        git config --global user.email "AzureDevOps@Build&DeployAppPipeline.com"
+        git config --global user.name "Azure DevOps - Build & Deploy App Pipeline"
+        git checkout -b main
+        git add manifests/backstage-resources/bs-deploy.yaml
+        git commit -m "App version tag updated to $(Build.BuildId) by Azure DevOps"
+        git push --set-upstream origin main
+      displayName: 'Push changes to GitHub'
+        

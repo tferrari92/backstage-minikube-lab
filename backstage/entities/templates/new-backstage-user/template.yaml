@@ -1,0 +1,114 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: new-backstage-user
+  title: New Backstage User
+  description: Create new Backstage user
+  tags:
+    - backstage
+spec:
+  owner: web@example.com
+  type: component
+  parameters:
+    - title: Provide some simple information
+      required:
+        - name
+        - lastName
+        - email
+        - group
+        - pictureURL
+      properties:
+        name:
+          title: Name
+          type: string
+          description: Name of the new user
+          ui:field: EntityNamePicker
+          ui:autofocus: true
+        lastName:
+          title: Last Name
+          type: string
+          description: Last name of the new user
+          ui:field: EntityNamePicker
+          ui:autofocus: true
+        email:
+          title: Email
+          type: string
+          description: Email of the new user
+          # ui:field: EntityNamePicker
+          ui:autofocus: true
+        pictureURL:
+          title: Profile picutre
+          type: string
+          description: URL to the profile picture of the new user
+          ui:autofocus: true
+        group:
+          title: Group
+          type: string
+          description: Group this user belongs to
+          ui:field: OwnerPicker
+          ui:options:
+            allowedKinds:
+              - Group
+
+    - title: Choose a location
+      required:
+        - repoUrl
+      properties:
+        repoUrl:
+          title: Repository Location
+          type: string
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
+              - github.com
+
+  steps:
+    - id: fetch-base
+      name: Fetch Base
+      action: fetch:template
+      input:
+        url: ./skeleton
+        values:
+          name: ${{ parameters.name }}
+          lastName: ${{ parameters.lastName }}
+          email: ${{ parameters.email }}
+          group: ${{ parameters.group }}
+          pictureURL: ${{ parameters.pictureURL }}
+
+    # - id: append-new-user
+    #   name: Append new user to all-users.yaml
+    #   action: shell
+    #   input:
+    #     cmd: bash
+    #     args:
+    #       - -c
+    #       - |
+    #         echo "    - ./users/${{parameters.name | lower }}-${{parameters.lastName | lower }}.yaml" >> entities/all-users.yaml
+
+    - id: publish
+      name: Publish
+      action: publish:github:pull-request
+      input:
+        allowedHosts: ['github.com']
+        repoUrl: ${{ parameters.repoUrl }}
+        title: "Create new user: ${{parameters.name}} ${{parameters.lastName}}"
+        branchName: create-user-${{parameters.name | lower }}-${{parameters.lastName | lower }}
+        description: |
+          # New user: ${{parameters.name}} ${{parameters.lastName}}
+        targetPath: backstage/entities/users
+        # targetPath: "" # Leave empty to use the root of the repo or specify if needed
+        # paths: 
+        #   - backstage/entities/users
+        #   - backstage/entities/all-users.yaml
+        
+  output:
+    links:
+      - url: ${{steps.publish.output.remoteUrl}}
+        title: "Go to PR"
+      # - title: Repository
+      #   url: ${{ steps.publish.output.remoteUrl }}
+      # - title: Open in catalog
+      #   icon: catalog
+      #   entityRef: ${{ steps.register.output.entityRef }}
+
+

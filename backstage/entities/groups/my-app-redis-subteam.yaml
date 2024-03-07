@@ -1,0 +1,18 @@
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: my-app-redis-subteam
+  title: My-App Redis Subteam
+  description: Responsible for maintaining and developing the redis database of My-App
+  tags:
+    - database
+    - redis
+spec:
+  type: team
+  children: []
+  parent: my-app-team
+  # members:
+  #   - masterchief
+  profile:
+    email: my-app-redis-subteam@example.com
+    # slack: 

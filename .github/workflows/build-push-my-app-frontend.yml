@@ -1,0 +1,31 @@
+name: Build & push my-app-frontend image
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'application-code/my-app/frontend/**'
+
+env:
+  SYSTEM: my-app
+  SERVICE: frontend
+
+jobs:
+  build-and-push:
+    name: Build & push docker image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Build and push Docker image
+        uses: mr-smithers-excellent/docker-build-push@v4
+        with:
+          image: ${{ secrets.DOCKER_USERNAME }}/${{ env.SYSTEM }}-${{ env.SERVICE }}
+          tag: ${{ github.run_number }}
+          registry: docker.io
+          directory: application-code/${{ env.SYSTEM }}/${{ env.SERVICE }}
+          dockerfile: application-code/${{ env.SYSTEM }}/${{ env.SERVICE }}/Dockerfile
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}

@@ -1,0 +1,6 @@
+environment: prod
+    
+deployment:
+  image:  
+    tag: 
+  replicas: 1

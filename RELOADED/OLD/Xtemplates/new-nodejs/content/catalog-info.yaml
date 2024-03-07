@@ -1,0 +1,13 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ${{ values.name | dump }}
+  annotations:
+    github.com/project-slug: samgabrail/aws-eks
+    # The following line is commented out. If you need it, remove the # and adjust as necessary
+    # github.com/project-slug: samgabrail/${{ values.name }}
+  description: ${{ values.name }} running on AWS EKS cluster managed by Terraform
+spec:
+  type: service
+  owner: user:guest
+  lifecycle: experimental

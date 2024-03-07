@@ -1,0 +1,21 @@
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: my-app-team
+  title: My-App Team
+  description: Responsible for maintaining and developing the My-App system
+  tags:
+    - engineering
+    - infrastructure
+spec:
+  type: team
+  children: []
+  # parent: 
+  # children: 
+  #   - my-app-redis-subteam
+  #   - my-app-backend-subteam
+  #   - my-app-frontend-subteam
+  # members:
+  profile:
+    email: my-app-team@example.com
+    # slack:
