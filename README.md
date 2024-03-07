@@ -89,18 +89,15 @@ git push
 # RUN BACKSTAGE LOCALLY
 Before deploying Backstage in a Kubernetes environment (Minikube), we need to build it locally.
 
-</br>
-
-### Install nvm
+Install nvm:
 ```bash
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
 nvm install 18
 nvm use 18
 nvm alias default 18
 ```
-</br>
 
-### Install yarn
+Install yarn and dependencies:
 ```bash
 npm install --global yarn
 yarn set version 1.22.19
@@ -130,7 +127,7 @@ Create these two repository secrets on your GitHub repo:
 
 </br> -->
 
-### Local testing
+### Run locally
 Create env var for your GitHub token
 ```bash
 export GITHUB_TOKEN=<your-github-token>
