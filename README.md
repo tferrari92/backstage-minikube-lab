@@ -209,7 +209,7 @@ It generates a Pull Request which includes a new User manifest. When merged, the
 Creates all the boilerplate files and directories in an existing repo for deploying a new Node.js service in Kubernetes:
 1. The application code directory and files, which will saved in [the application-code directory](/application-code/).
 2. The kubernetes manifests directory and files, which will be saved in [the k8s-manifests directory](/k8s-manifests/).
-3. The build and push GitHub workflow manifest, which will be saved [the .github/workflows directory](/.github/workflows/).
+3. The build and push GitHub workflow manifest, which will be saved [the .github/workflows directory](/.github/workflows/) (working with GitHub Workflows is out of the scope of this lab).
 
 It generates a Pull Request which includes all these files al directories.
 
@@ -219,7 +219,7 @@ It generates a Pull Request which includes all these files al directories.
 Creates all the boilerplate files and directories in an existing repo for deploying a new NGINX service in Kubernetes:
 1. The application code directory and files, which will saved in [the application-code directory](/application-code/).
 2. The kubernetes manifests directory and files, which will be saved in [the k8s-manifests directory](/k8s-manifests/).
-3. The build and push GitHub workflow manifest, which will be saved [the .github/workflows directory](/.github/workflows/).
+3. The build and push GitHub workflow manifest, which will be saved [the .github/workflows directory](/.github/workflows/) (working with GitHub Workflows is out of the scope of this lab).
 
 It generates a Pull Request which includes all these files al directories.
 
@@ -247,31 +247,17 @@ Also, we will always have the spec.children value of Group manifests as an empty
 
 
 # RUN BACKSTAGE IN MINIKUBE
+Ok, lets run Backstage in Minikube. `Ctrl + C` to kill the `yarn dev` process.
 
-### Build and push backstage container image to DockerHub
-To build and push the Docker image, run the build-push-image.sh script
+We first need o build and push the Backstage Docker image. Run the build-push-image.sh script:
 ```bash
 chmod +x build-push-image.sh
 ./build-push-image.sh
 ```
-<!-- RELOADED
-### Update image tag in backstage chart values
-Update the value of backstage.image.tag in the backstage values-custom.yaml 
-```bash
-cd ../..
-vim backstage/helm-chart/values-custom.yaml
-```
-Save and push to repo
-```bash
-git add .
-git commit -m "Updated backstage image tag"
-git push
-``` -->
 
-</br>
+If you have a Minikube cluster running, delete it first with `minikube delete`.
 
-### Minikube environment setup
-Run the start.sh script to get everything setup
+Now run the deploy-in-minikube.sh script to get everything setup:
 ```bash
 chmod +x deploy-in-minikube.sh
 ./deploy-in-minikube.sh
@@ -338,7 +324,7 @@ Build and push image
 
 
 
-
+<!-- 
 ##### A note on RepoUrlPicker
 In the template.yaml file of the template we created, you must have noticed ui:field: RepoUrlPicker in the spec.parameters field. This is known as Scaffolder Field Extensions.
 
@@ -366,7 +352,7 @@ search:
       maxFragments: 0 # Maximum number of text fragments to display. The default value of zero selects a non-fragment-based headline generation method. A value greater than zero selects fragment-based headline generation (see the linked documentation above for more details).
       fragmentDelimiter: ' ... ' # Delimiter string used to concatenate fragments. Defaults to " ... ".
 ```
-https://www.kosli.com/blog/implementing-backstage-2-using-the-core-features/
+https://www.kosli.com/blog/implementing-backstage-2-using-the-core-features/ -->
 
 
 
@@ -374,19 +360,8 @@ https://www.kosli.com/blog/implementing-backstage-2-using-the-core-features/
 
 
 
-VER PORQ EL RESOURCE REDIS NO APARECE BAJO OWNERSHIP DEL GRUPO REDIS
+<!-- VER PORQ EL RESOURCE REDIS NO APARECE BAJO OWNERSHIP DEL GRUPO REDIS
 PORQ My-App Redis Subteam no muestra ownership de resource redis??? http://localhost:3000/catalog/default/group/my-app-redis-subteam
 
-
-Pipeline is out of the scope of this lab
-
-
-
-PASARLE LEABLES A DPL DE BACKEND POR VALUES!!!!
-
-
-AVECES TARDE EN LEVANTAR EL POD DE POSTGRESS. HASTA Q ESE NO ESTE LISTO BS NO VA  A ANDAR, QUIZAS HAYA Q TIRAR PORT FORWARD VARIAS VECES, SACAR PF DE SCRRIPT Y PONER LA INSTRUCCION EN EL README
-
-
 ARREGLAR DLO DE LOS TAGS EN LOS TEMPLATES DE CREAR SERVICIOS
-AGREGAR DEPENDS ON EN TEMPLATE
+AGREGAR DEPENDS ON EN TEMPLATE -->
