@@ -22,5 +22,6 @@ replace_string_in_file "application-code/my-app/frontend/catalog-info.yaml" "$gi
 replace_string_in_file "application-code/my-app/redis/catalog-info.yaml" "$github_username" "$dockerhub_username"
 replace_string_in_file "backstage/helm-chart/values-custom.yaml" "$github_username" "$dockerhub_username"
 replace_string_in_file "backstage/my-backstage/app-config.yaml" "$github_username" "$dockerhub_username"
+replace_string_in_file "backstage/my-backstage/build-push-image.sh" "$github_username" "$dockerhub_username"
 
 echo -n "That's it! All necessary files were updated with the info you provided. You can go back to the README and carry on with the guide."
