@@ -3,6 +3,9 @@ app:
   title: Automate All The Things
   baseUrl: http://localhost:7007
 
+organization:
+  name: Automate All The Things
+
 backend:
   # This is because when running in K8S, profile images of users don't load. We get error: 
   # Refused to load the image 'https://i.imgur.com/LWGqYi2.jpg' because it violates the following Content Security Policy directive: "img-src 'self' data:".
