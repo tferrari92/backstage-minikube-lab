@@ -30,4 +30,6 @@ spec:
   system: my-app
   dependsOn:
     - component:default/my-app-backend
+  consumesApis:
+    - my-app-backend-api
 
