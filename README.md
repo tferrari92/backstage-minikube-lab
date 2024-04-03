@@ -184,6 +184,7 @@ I've already added some custom stuff to the default Backstage installation that 
 The [Kubernetes plugin](https://backstage.io/docs/features/kubernetes/) in Backstage is a tool that's designed around the needs of service owners, not cluster admins. Now developers can easily check the health of their services no matter how or where those services are deployed — whether it's on a local host for testing or in production on dozens of clusters around the world.
 
 It will elevate the visibility of errors where identified, and provide drill down about the deployments, pods, and other objects for a service.
+
 </br>
 
 ### GitHub Discovery plugin 
