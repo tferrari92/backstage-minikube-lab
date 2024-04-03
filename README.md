@@ -48,12 +48,68 @@ Backstage is a framework for creating developer portals. This developer portal s
 - minikube installed
 - kubectl installed
 - helm installed
+- nodejs installed
+- nvm installed
+- yarn installed
 
 </br>
 </br>
 
 # INITIAL SETUP
-In order to turn this whole deployment into your own thing, we need to do some initial setup:
+Before deploying Backstage in a Kubernetes environment (Minikube), we need to build it locally.
+
+<!-- Install nvm:
+```bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+export NVM_DIR="$HOME/.nvm"
+``` -->
+
+Make sure you are using Node.js version 18
+```bash
+nvm install 18
+nvm use 18
+nvm alias default 18
+```
+<!-- 
+Install nodejs and npm
+```bash
+sudo apt update
+sudo apt install nodejs
+sudo apt install npm
+``` -->
+
+Make sure you are using Yarn version 1.22.19
+<!-- # sudo npm install --global yarn -->
+```bash
+yarn set version 1.22.19
+yarn --version
+```
+<!-- # yarn global add concurrently -->
+</br>
+
+### Get GitHub PAT (Personal Access Token)
+
+Navigate to the GitHub PAT creation page. Select "Generate new token (classic)". 
+
+Choose a name and a value for expiration. Under scopes select "repo" and "workflow". It should look something like this:
+
+<p title="GitHub Token" align="center"> <<img width="650" src="https://i.imgur.com/zTn7gDI.png"> </p>
+
+Click Generate token. Store the token somewhere safe.
+
+</br>
+
+<!-- ### (Optional) Set up secrets for GitHub workflows
+This is only required if you intend to use GitHub workflows.
+
+Create these two repository secrets on your GitHub repo:
+- DOCKER_USERNAME: <your-dockerhub-username\>
+- DOCKER_PASSWORD: <your-dockerhub-password\>
+
+</br> -->
+
+### Fork and clone the repo
+Let's turn this whole deployment into your own thing.
 
 1. Fork this repo. Keep the repository name "backstage-minikube-lab".
 1. Clone the repo from your fork:
@@ -87,63 +143,28 @@ git push
 </br>
 
 # RUN BACKSTAGE LOCALLY
-Before deploying Backstage in a Kubernetes environment (Minikube), we need to build it locally.
+Everything's ready to start playing with Backstage.
 
-Install nvm:
-```bash
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
-nvm install 18
-nvm use 18
-nvm alias default 18
-```
-
-Install yarn and dependencies:
-```bash
-npm install --global yarn
-yarn set version 1.22.19
-yarn --version
-yarn global add concurrently
-```
-</br>
-
-### Get GitHub PAT (Personal Access Token)
-
-Navigate to the GitHub PAT creation page. Select "Generate new token (classic)". 
-
-Choose a name and a value for expiration. Under scopes select "repo" and "workflow". It should look something like this:
-
-<p title="GitHub Token" align="center"> <<img width="650" src="https://i.imgur.com/zTn7gDI.png"> </p>
-
-Click Generate token. Store the token somewhere safe.
-
-</br>
-
-<!-- ### (Optional) Set up secrets for GitHub workflows
-This is only required if you intend to use GitHub workflows.
-
-Create these two repository secrets on your GitHub repo:
-- DOCKER_USERNAME: <your-dockerhub-username\>
-- DOCKER_PASSWORD: <your-dockerhub-password\>
-
-</br> -->
-
-### Run locally
 Create env var for your GitHub token
 ```bash
 export GITHUB_TOKEN=<your-github-token>
 ```
 
-Then run
+cd into my-backstage directory
 ```bash
 cd backstage/my-backstage/
+```
+
+Then run
+```bash
 yarn install
 yarn tsc
 yarn dev
 ```
 
-This should open Backstage in your browser on localhost:3000.
+Open your browser and go to localhost:3000. You should see the Backstage web UI.
 
-Every time you make changes to the Backstage code, it's recommended you test it by running it locally with "yarn dev", since it will be much faster that testing it in Minikube.
+Every time you make changes to the Backstage code, it's recommended you test it by running it locally with "yarn dev" like you just did. This will be much faster that testing every change in Minikube.
 
 </br>
 </br>
@@ -163,7 +184,6 @@ I've already added some custom stuff to the default Backstage installation that 
 The [Kubernetes plugin](https://backstage.io/docs/features/kubernetes/) in Backstage is a tool that's designed around the needs of service owners, not cluster admins. Now developers can easily check the health of their services no matter how or where those services are deployed — whether it's on a local host for testing or in production on dozens of clusters around the world.
 
 It will elevate the visibility of errors where identified, and provide drill down about the deployments, pods, and other objects for a service.
-
 </br>
 
 ### GitHub Discovery plugin 
@@ -244,25 +264,28 @@ Also, we will always have the spec.children value of Group manifests as an empty
 # RUN BACKSTAGE IN MINIKUBE
 Ok, lets run Backstage in Minikube. `Ctrl + C` to kill the `yarn dev` process.
 
-We first need to build and push the Backstage Docker image. Run the build-push-image.sh script:
+We first need to build and push the Backstage Docker image. Login to Docker
+```bash
+docker login
+```
+
+Then run the build-push-image.sh script
 ```bash
 chmod +x build-push-image.sh
 ./build-push-image.sh
 ```
 
-If you have a Minikube cluster running, delete it first with `minikube delete`.
-
 cd to the root of the repo:
 ```bash
 cd ../..
 ```
+If you have a Minikube cluster running, delete it first with `minikube delete`.
 
 Now run the deploy-in-minikube.sh script to get everything setup:
 ```bash
 chmod +x deploy-in-minikube.sh
 ./deploy-in-minikube.sh
 ```
-
 </br>
 
 Now go to localhost:8080 on your browser and Voilá!
@@ -280,42 +303,6 @@ For more DevOps and Platform Engineering goodness, check out my [Automate All Th
 Happy automating!
 
 
-<!-- # CHALLENGE
-
-Create a new system with a  -->
-
-<!-- 
-# CUSTOMIZE YOUR OWN BACKSTAGE
-Now you are free to make all the customizations you want . These are some things you can try:
-
-## Create New Templates
-create template directory save it in backstage/entities/templates/
-
-## Add New Plugins
-bla bla
-Test with yarn dev
-Build and push image -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -324,12 +311,33 @@ Build and push image -->
 
 
 <!-- 
+##### Info interesante:
+https://backstage.spotify.com/learn/backstage-for-all/software-catalog/4-modeling/
+https://backstage.spotify.com/learn/standing-up-backstage/putting-backstage-into-action/8-integration/
+https://backstage.spotify.com/learn/onboarding-software-to-backstage/onboarding-software-to-backstage/5-register-component/
+
+##### Info datallada sobre objetos de tipo template:
+https://backstage.io/docs/features/software-catalog/descriptor-format#kind-template
+##### Aqui las acciones q puede hacer el template:
+http://localhost:3000/create/actions
+##### Para acciones q no existen default:
+https://backstage.io/docs/features/software-templates/writing-custom-actions/
 ##### A note on RepoUrlPicker
 In the template.yaml file of the template we created, you must have noticed ui:field: RepoUrlPicker in the spec.parameters field. This is known as Scaffolder Field Extensions.
 
 These field extensions are used in taking certain types of input from users like GitHub repository URL, teams registered in catalog for the owners field, etc. Such field extensions can also be customized for your own organization. See https://backstage.io/docs/features/software-templates/writing-custom-field-extensions/
 
+##### Aca hay ejemplos de templates:
+https://github.com/backstage/software-templates
 
+##### Software Templates at Spotify
+At Spotify, we have dozens of Software Templates. We divide them into several disciples like Backend, Frontend, Data pipelines, etc. Inside Spotify, we also have stakeholder groups for Web, Backend, Data, etc. separately. These Software Templates are hosted on our internal GitHub enterprise, maintained and reviewed by the concerned experts in the discipline.
+
+The Technical Architecture Group (TAG) at Spotify is the body responsible for reducing fragmentation by deciding on the various Backend, Frontend, Data frameworks to be used inside Spotify. Hence, new Software Templates with completely new frameworks are carefully discussed and reviewed.
+
+Our Software Templates are fundamental to the concept of Golden Paths at Spotify. The Golden Path is the opinionated and supported way to build something (for example, build a backend service, put up a website, create a data pipeline). The Golden Path Tutorial is a step-by-step instructions that walks you through this opinionated and supported path.
+
+The blessed tools — those on the Golden Path — are visualized in the Explore section of Backstage. Read more https://engineering.atspotify.com/2020/08/how-we-use-golden-paths-to-solve-fragmentation-in-our-software-ecosystem/
 
 
 
@@ -355,12 +363,11 @@ https://www.kosli.com/blog/implementing-backstage-2-using-the-core-features/ -->
 
 
 
-
-
-
-
 <!-- VER PORQ EL RESOURCE REDIS NO APARECE BAJO OWNERSHIP DEL GRUPO REDIS
 PORQ My-App Redis Subteam no muestra ownership de resource redis??? http://localhost:3000/catalog/default/group/my-app-redis-subteam
+# BACKSTAGE
+If the only change you've made is to the app-config.yaml (or other configuration files) and not to the application code itself, you don't necessarily need to run yarn build or yarn build:backend. The Docker image build process should copy the updated configuration files into the image.
 
+AGREGARLE DESCRIPTION AL REPO DE GHUB
 ARREGLAR DLO DE LOS TAGS EN LOS TEMPLATES DE CREAR SERVICIOS
 AGREGAR DEPENDS ON EN TEMPLATE -->
