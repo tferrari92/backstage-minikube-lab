@@ -1,6 +1,7 @@
 name: Build & push my-app-backend image
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
