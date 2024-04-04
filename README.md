@@ -278,7 +278,7 @@ chmod +x build-push-image.sh
 ./build-push-image.sh
 ```
 
-cd to the root of the repo:
+`cd` to the root of the repo:
 ```bash
 cd ../..
 ```
