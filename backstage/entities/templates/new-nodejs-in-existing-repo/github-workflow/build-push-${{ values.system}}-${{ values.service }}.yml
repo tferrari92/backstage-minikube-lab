@@ -1,6 +1,7 @@
 name: Build & push ${{ values.system }}-${{ values.service }} image
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
