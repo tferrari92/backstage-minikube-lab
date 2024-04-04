@@ -301,7 +301,7 @@ That's it! This is your own Backstage implementation now.
 
 Feel free to add your own plugins, templates and whatever else you might think of. Customize it to fit your own needs.
 
-For a more beefy Backstage implementation see the [Backstage Minikube Lab Reloaded edition](https://github.com/tferrari92/backstage-minikube-lab-reloaded).
+For a beefier Backstage implementation see the [Backstage Minikube Lab Reloaded edition](https://github.com/tferrari92/backstage-minikube-lab-reloaded).
 
 For more DevOps and Platform Engineering goodness, check out my [Automate All The Things](https://github.com/tferrari92/automate-all-the-things) project.
 
