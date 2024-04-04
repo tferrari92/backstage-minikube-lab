@@ -152,7 +152,7 @@ Create env var for your GitHub token
 export GITHUB_TOKEN=<your-github-token>
 ```
 
-cd into my-backstage directory
+`cd` into my-backstage directory
 ```bash
 cd backstage/my-backstage/
 ```
