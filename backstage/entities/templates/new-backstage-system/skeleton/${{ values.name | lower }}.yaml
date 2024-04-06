@@ -5,7 +5,7 @@ metadata:
   {%- if values.description %}
   description: ${{ values.description }}
   {%- endif %}
-  {%- if values.tags %}
+  {%- if values.tags != "" %}
   tags: 
     {%- for tag in values.tags %}
     - ${{ tag }}
