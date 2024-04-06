@@ -7,7 +7,9 @@ metadata:
 spec:
   type: ${{ values.type }}
   children: []
+  {%- if values.parent %}
   parent: ${{ values.parent }}
+  {%- endif %}
   profile:
     email: ${{ values.email }}
     # slack: 
