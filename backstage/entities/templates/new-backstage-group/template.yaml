@@ -21,7 +21,7 @@ spec:
         name:
           title: Name
           type: string
-          description: Name of the new user
+          description: Name of the new group
           ui:field: EntityNamePicker
           ui:autofocus: true
         title:
@@ -81,7 +81,11 @@ spec:
           type: ${{ parameters.type }}
           # Had to add default value 'root' because the 'parent' parameter in the Group manifest needs to have a value. It cannot be '[]' or 'null'. 
           # And since we are establishing hierarchy from the bottom up, we must have the 'parent' parameter in the Group manifest.
-          parent: ${{ parameters.parent | default('root') }}
+          # parent: ${{ parameters.parent | default('root') }} 
+          # THIS IS WRONG. This actually gives an error on the Backstage UI.
+          # So instead of this I added a conditional for values.parent on the skeleton.
+          # I leave this here for reference.
+          parent: ${{ parameters.parent }}
           email: ${{ parameters.email }}
 
     # - id: append-new-user
@@ -103,7 +107,7 @@ spec:
         title: "Create new group: ${{parameters.name}}"
         branchName: create-group-${{parameters.name | lower }}
         description: |
-          # New user: ${{parameters.name}}
+          # New group: ${{parameters.name}}
         targetPath: backstage/entities/groups
         # targetPath: "" # Leave empty to use the root of the repo or specify if needed
         # paths: 
