@@ -25,7 +25,7 @@ spec:
     spec:
       containers:
         - name: ${{ values.system }}-${{ values.service }}
-          image: tferrari92/${{ values.system }}-${{ values.service }}:0
+          image: <your-dockerhub-username>/${{ values.system }}-${{ values.service }}:0
           ports:
             - containerPort: 3000
           env:
