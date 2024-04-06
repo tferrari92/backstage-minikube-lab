@@ -112,6 +112,10 @@ backstage:
 
 postgresql:
   enabled: true
+  auth:
+    password: "backstage" # I hard-coded a password because for some reason, when updating the backstage with a new image tag, the new backstage pod can't connect to the database:
+                          # Backstage pod log: Backend failed to start up Error: Failed to connect to the database to make sure that 'backstage_plugin_catalog' exists, error: password authentication failed for user "bn_backstage"    
+                          # Postgres pod log: FATAL:  password authentication failed for user "bn_backstage"
 
 serviceAccount:
   create: true
