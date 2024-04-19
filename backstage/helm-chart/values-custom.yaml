@@ -2,7 +2,7 @@ backstage:
   command: ["node", "packages/backend", "--config", "app-config.production.yaml"]
 
   image:
-    registry: ""
+    registry: "" # This is necessary to override the default value "ghcr.io"
     repository: AATT_DOCKERHUB_USERNAME/backstage
     # tag: "0"
 
